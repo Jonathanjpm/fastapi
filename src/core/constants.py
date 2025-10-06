@@ -1,0 +1,5 @@
+WITHOUT_UPDATE = "No fields were provided for update"
+NOT_FOUND = "Article not found"
+DUPLICATE_ARTICLES = "duplicate articles for title and author"
+INTEGRITY_ERROR = "Data integrity error"
+ERROR_INTERNAL = "Error internal :: Details :: "

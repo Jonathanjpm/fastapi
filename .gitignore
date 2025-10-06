@@ -1,0 +1,17 @@
+venv/*
+# Byte-compiled / optimized / DLL files
+__pycache__/
+__pycache__/*
+*__pycache__/
+*.py[cod]
+*$py.class
+build/
+develop-eggs/
+dist/
+eggs/
+.eggs/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg

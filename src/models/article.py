@@ -1,36 +1,25 @@
-from pydantic import BaseModel, ConfigDict
-from typing import Optional
-from datetime import datetime
 import uuid
 
+from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String, Text, TIMESTAMP, Index, UniqueConstraint
 
-class ArticleGet(BaseModel):
-    id: uuid.UUID
-    title: str
-    body: str
-    tags: str
-    author: str
-    published_at: Optional[datetime] = None
-    created_at: datetime
-    updated_at: datetime
-    model_config = ConfigDict(from_attributes=True)
+from core.database import Base
 
-class ArticleCreate(BaseModel):
-    title: str
-    body: str
-    tags: str
-    author: str
-    published_at: Optional[datetime] = None
+class Article(Base):
+    __tablename__ = "articles"
 
-class ArticleUpdate(BaseModel):
-    title: Optional[str] = None
-    body: Optional[str] = None
-    tags: Optional[str] = None
-    author: Optional[str] = None
-    published_at: Optional[datetime] = None
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    title = Column(String, nullable=False)
+    body = Column(Text, nullable=False)
+    tags = Column(Text, nullable=False)
+    author = Column(String, nullable=False)
+    published_at = Column(TIMESTAMP, nullable=True)
+    created_at = Column(TIMESTAMP, server_default=func.now())
+    updated_at = Column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
-class ArticleFilters(BaseModel):
-    author: Optional[str] = None
-    tags: Optional[str] = None
-    page: int = 1
-    size: int = 10
+    __table_args__ = (
+        UniqueConstraint("title", "author", name="unique_title_author"),
+        Index("idx_author", "author"),
+        Index("idx_published_at", "published_at"),
+    )
